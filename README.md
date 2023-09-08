@@ -20,7 +20,7 @@ npm run start
 
 ### API Endpoints
 
-1. GET /updateExchangeRates: Get xml data from http://www.bsi.si/_data/tecajnice/dtecbs-l.xml - HIT WITH POSTMAN
+1. GET /updateExchangeRates: Get xml data from http://www.bsi.si/_data/tecajnice/dtecbs-l.xml
 2. GET /getExchangeRates Get rates between two currencies
 3. GET /getAllCurrencies: Get all unique currencies.
 4. GET /calculateOpportunity: Calculate exchange rate opportunities between two currencies.
@@ -46,5 +46,6 @@ COLLATE=utf8mb4_0900_ai_ci;
 
 ### Note
 
-cors.config check whiteliste if you get cors error on fe. Don't forget to save xml file to db to hit /updateExchangeRates with postman
+cors.config check whiteliste if you get cors error on fe.
+
 I've been using node -v 20!
