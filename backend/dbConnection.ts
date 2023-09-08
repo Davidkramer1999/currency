@@ -7,7 +7,6 @@ let connection: mysql.Connection;
 
 export async function createConnection() {
   if (!connection) {
-    console.log("Creating new database connection");
     connection = await mysql.createConnection({
       host: process.env.MYSQL_HOST,
       port: Number(process.env.MYSQL_PORT),

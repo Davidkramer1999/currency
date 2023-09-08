@@ -31,6 +31,19 @@ npm run start
 2. npm install
 3. crete .env add be route
 
+### Create table for mysql
+
+CREATE TABLE exchange_rates (
+id INT AUTO_INCREMENT PRIMARY KEY,
+date DATE NOT NULL,
+currency_code VARCHAR(10) NOT NULL,
+currency_id INT NOT NULL,
+rate DECIMAL(10, 4) NOT NULL
+)
+ENGINE=InnoDB
+DEFAULT CHARSET=utf8mb4
+COLLATE=utf8mb4_0900_ai_ci;
+
 ### Note
 
 cors.config check whiteliste if you get cors error on fe. Don't forget to save xml file to db to hit /updateExchangeRates with postman

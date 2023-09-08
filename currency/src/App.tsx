@@ -23,6 +23,7 @@ import es from "date-fns/locale/es";
 import CurrencyChat from "./components/CurrencyChart";
 import Opportunity from "./components/Opportunity";
 import FormControlWithError from "./components/FormControlWithError";
+import FetchXml from "./components/FetchXml";
 
 export interface Currency {
   date: Date;
@@ -85,6 +86,9 @@ export default function App() {
 
   return (
     <div style={{ padding: 10 }}>
+      <div>
+        <FetchXml></FetchXml>
+      </div>
       <div style={{ padding: 10 }}>
         {`Start date: `}
         <DatePicker dateFormat="dd.MM.yyyy" selected={startDate} onChange={(date: Date) => setStartDate(date)} />
@@ -111,7 +115,7 @@ export default function App() {
 
         <FormControlWithError error={error}></FormControlWithError>
 
-        <Button onClick={checkFields}>Get data</Button>
+        <Button onClick={checkFields}>Get currency data</Button>
       </div>
 
       <TableContainer component={Paper}>

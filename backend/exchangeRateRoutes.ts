@@ -2,39 +2,55 @@ import express from "express";
 import { connection } from "./db";
 import { fetchData } from "./fetchData";
 import { calculateOpportunityGainsOrLosses } from "./utils";
+import mysql from 'mysql2/promise';
 
-async function executeQuery(query: string, params: Array<any>) {
+async function executeQuery(query: string, params: Array<any>, isBulk: boolean = false) {
   const dbConnection = await connection;
+  if (isBulk) {
+    return await dbConnection?.query(query, [params]);
+  }
   return await dbConnection.execute(query, params);
 }
+
 
 export const exchangeRateRouter = express.Router();
 
 exchangeRateRouter.post("/updateExchangeRates", async (req, res) => {
   console.log("Updating exchange rates");
   try {
-    const dbConnection = await connection;
     const xmlData = await fetchData();
     console.log("Data fetched successfully");
+
     const tecajnica = xmlData.DtecBS.tecajnica;
+
+    const insertValues: Array<[string, string, string, string]> = [];
+
     for (let tecajnicaData of tecajnica) {
       const date = tecajnicaData.$.datum;
       for (let tecaj of tecajnicaData.tecaj) {
         const currencyCode = tecaj.$.oznaka;
         const currencyId = tecaj.$.sifra;
         const rate = tecaj._;
-        const query = `
-            INSERT INTO exchange_rates (date, currency_code, currency_id, rate)
-            VALUES (?, ?, ?, ?)
-          `;
-        await dbConnection.execute(query, [date, currencyCode, currencyId, rate]);
+
+        // Add each set of values as a sub-array
+        insertValues.push([date, currencyCode, currencyId, rate]);
       }
     }
-    res.status(200).send("Data updated successfully.");
+
+    const query = `
+      INSERT INTO exchange_rates (date, currency_code, currency_id, rate)
+      VALUES ?
+    `;
+
+    await executeQuery(query, insertValues, true);
+
+    res.status(200).json({ message: "Data updated successfully." , success: true});
   } catch (error) {
-    res.status(500).send("An error occurred: " + error);
+    console.error("An error occurred: ", error);
+    res.status(500).json({ message: "An error occurred." });
   }
 });
+
 
 exchangeRateRouter.get("/getExchangeRates", async (req, res, next) => {
   try {
