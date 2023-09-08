@@ -25,10 +25,13 @@ npm run start
 3. GET /getAllCurrencies: Get all unique currencies.
 4. GET /calculateOpportunity: Calculate exchange rate opportunities between two currencies.
 
-Note cors.config check whiteliste if you get cors error on fe. Don't forget to save xml file to db to hit /updateExchangeRates with postman
-
 ### Getting Started Front-End/curreny !!!
 
 1. cd to currency
 2. npm install
 3. crete .env add be route
+
+### Note
+
+cors.config check whiteliste if you get cors error on fe. Don't forget to save xml file to db to hit /updateExchangeRates with postman
+I've been using node -v 20!
