@@ -31,10 +31,17 @@ npm run start
 
 sh
 API Endpoints
-GET /updateExchangeRates: Get xml data from http://www.bsi.si/_data/tecajnice/dtecbs-l.xml
+GET /updateExchangeRates: Get xml data from http://www.bsi.si/_data/tecajnice/dtecbs-l.xml - HIT WITH POSTMAN 
 GET /getExchangeRates Get rates between two currencies
 GET /getAllCurrencies: Get all unique currencies.
 GET /calculateOpportunity: Calculate exchange rate opportunities between two currencies.
 
-Note cors.config check whiteliste if you get cors error on fe
+Note cors.config check whiteliste if you get cors error on fe. Don't forget to save xml file to db to hit /updateExchangeRates with postman
+
+Front-End/curreny README
+
+1. cd to currency
+2. npm install
+3. crete .env add be route
+   
 
