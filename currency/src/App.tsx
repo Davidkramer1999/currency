@@ -1,29 +1,16 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import {
-  TableContainer,
-  Table,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableBody,
-  Paper,
-  Button,
-  Select,
-  MenuItem,
-} from "@mui/material";
 
 import "react-datepicker/dist/react-datepicker.css";
 import { registerLocale } from "react-datepicker";
 
-import DatePicker from "react-datepicker";
-import { format } from "date-fns";
 import es from "date-fns/locale/es";
 
 import CurrencyChat from "./components/CurrencyChart";
 import Opportunity from "./components/Opportunity";
-import FormControlWithError from "./components/FormControlWithError";
 import FetchXml from "./components/FetchXml";
+import TableCurrency from "./components/TableCurrency";
+import DateAndCurrencySelector from "./components/DateAndCurrencySelector";
 
 export interface Currency {
   date: Date;
@@ -40,14 +27,14 @@ export default function App() {
   registerLocale("es", es);
 
   // currency
-  const [data, setData] = useState<Currency[]>([]);
+  const [currencyData, setCurrencyData] = useState<Currency[]>([]);
   const [startDate, setStartDate] = useState(new Date("2007-01-01"));
-  const [endDate, setEndDate] = useState<Date | null>(startDate);
-  const [currencies, setCurrencies] = useState([]);
+  const [endDate, setEndDate] = useState<Date>(startDate);
+  const [currencies, setCurrencies] = useState<Array<string>>([]);
   const [currenciesList, setCurrenciesList] = useState<CurrencyList[]>([]);
 
   //error handling
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<string>("");
 
   useEffect(() => {
     fetchCurrencies();
@@ -58,18 +45,18 @@ export default function App() {
       setError("Please fill out all fields");
       return;
     }
-    setError(null);
-    fetchData();
+    setError("");
+    fetchCurrencyData();
   };
 
-  const fetchData = async () => {
+  const fetchCurrencyData = async () => {
     try {
       const formattedStartDate = startDate?.toISOString().split("T")[0];
       const formattedEndDate = endDate?.toISOString().split("T")[0];
       const response = await axios.get(
         `${process.env.REACT_APP_API_URL}/getExchangeRates?startDate=${formattedStartDate}&endDate=${formattedEndDate}&currencies=${currencies}`
       );
-      setData(response.data);
+      setCurrencyData(response.data);
     } catch (error) {
       setError("Error fetching data");
     }
@@ -86,62 +73,25 @@ export default function App() {
 
   return (
     <div style={{ padding: 10 }}>
-      <div>
+      <div style={{ padding: 10 }}>
         <FetchXml></FetchXml>
       </div>
       <div style={{ padding: 10 }}>
-        {`Start date: `}
-        <DatePicker dateFormat="dd.MM.yyyy" selected={startDate} onChange={(date: Date) => setStartDate(date)} />
-        {`End date: `}
-        <DatePicker dateFormat="dd.MM.yyyy" selected={endDate} onChange={(date: Date) => setEndDate(date)} />
-        <div style={{ padding: 10 }}>
-          <Select
-            style={{ width: "200px", height: "50px" }}
-            labelId="label"
-            id="demo-simple-select"
-            value={currencies}
-            onChange={(e: any) => {
-              setCurrencies(e.target.value);
-            }}
-            multiple
-          >
-            {currenciesList.map((currency, index) => (
-              <MenuItem key={index} value={currency.value}>
-                {currency.value}
-              </MenuItem>
-            ))}
-          </Select>
-        </div>
-
-        <FormControlWithError error={error}></FormControlWithError>
-
-        <Button onClick={checkFields}>Get currency data</Button>
+        <DateAndCurrencySelector
+          startDate={startDate}
+          setStartDate={setStartDate}
+          endDate={endDate}
+          setEndDate={setEndDate}
+          currencies={currencies}
+          setCurrencies={setCurrencies}
+          currenciesList={currenciesList}
+          checkFields={checkFields}
+          error={error}
+        />
       </div>
-
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Date</TableCell>
-              <TableCell align="right">Currency</TableCell>
-              <TableCell align="right">Rate</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {data.length !== 0
-              ? data.map((row, index) => (
-                  <TableRow key={index}>
-                    <TableCell>{format(new Date(row?.date), "dd.MM.yyyy")}</TableCell>
-                    <TableCell align="right">{row?.currency_code || ""}</TableCell>
-                    <TableCell align="right">{row?.rate || ""}</TableCell>
-                  </TableRow>
-                ))
-              : null}
-          </TableBody>
-        </Table>
-      </TableContainer>
+      <TableCurrency data={currencyData || []} />
       {/* chart */}
-      <CurrencyChat currencyData={data} />
+      <CurrencyChat currencyData={currencyData} />
       {/* Opportunity */}
       <Opportunity currenciesList={currenciesList}></Opportunity>
     </div>

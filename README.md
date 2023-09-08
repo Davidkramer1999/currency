@@ -2,6 +2,12 @@
 
 ### Project Description
 
+Fetches xml from http://www.bsi.si/_data/tecajnice/dtecbs-l. makes conversion to json
+and saves to db. Then showing on fe chart and table of selected dates and currencies.
+
+There is option to select start, end date, currency and second currency which will tell
+you if you are in loss or profit.
+
 This is a back-end service built with Node.js, MySQL, and Docker that provides API endpoints for currency exchange rates.
 
 ### Getting Started BE!!!!

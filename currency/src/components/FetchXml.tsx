@@ -28,7 +28,11 @@ const FetchXml: React.FC = () => {
 
   return (
     <div>
-      {!loading && <Button onClick={saveXmlToDb}>Save or update xml to db</Button>}
+      {!loading && (
+        <Button style={{ border: "1px solid black" }} onClick={saveXmlToDb}>
+          Save or update xml to db
+        </Button>
+      )}
       {loading && <div>Loading...</div>}
       {error && <div style={{ color: "red" }}>{error}</div>}
     </div>

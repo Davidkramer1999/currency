@@ -62,39 +62,46 @@ export default function Opportunity({ currenciesList }: OpportunityProps) {
 
   return (
     <div>
-      {`Start date: `}
-      <DatePicker
-        dateFormat="dd.MM.yyyy"
-        selected={opportunityStartDate}
-        onChange={(date: Date) => setOpportunityStartDate(date)}
-      />
-      {`End date: `}
-      <DatePicker
-        dateFormat="dd.MM.yyyy"
-        minDate={opportunityStartDate}
-        selected={opportunityEndDate}
-        onChange={(date: Date) => setOpportunityEndDate(date)}
-      />
-      <div style={{ padding: 20 }}>
+      <div style={{ padding: 10 }}>
+        {`Start date: `}
+        <DatePicker
+          dateFormat="dd.MM.yyyy"
+          selected={opportunityStartDate}
+          onChange={(date: Date) => setOpportunityStartDate(date)}
+        />
+      </div>
+      <div style={{ padding: 10 }}>
+        {`End date: `}
+        <DatePicker
+          dateFormat="dd.MM.yyyy"
+          minDate={opportunityStartDate}
+          selected={opportunityEndDate}
+          onChange={(date: Date) => setOpportunityEndDate(date)}
+        />
+      </div>
+      <div style={{ padding: 10 }}>
         <CurrencyDropdown
           label="Select first currency"
           value={opportunityFirstCurrencies}
           onChange={setOpportunitySetFirstCurrencies}
           options={currenciesList}
         />
-        <CurrencyDropdown
-          label="Select second currency"
-          value={opportunitySecondCurrencies}
-          onChange={setOpportunitySecondCurrencies}
-          options={currenciesList}
-          disabled={opportunityFirstCurrencies.length === 0}
-        />
-      </div>
-      <Button onClick={checkFields}> Get opportunity data</Button>
-      <FormControlWithError error={error}></FormControlWithError>
-      <div>
-        {`Opportunity is ${resultType}: `}
-        {opportunityData ? Math.round(parseFloat(opportunityData)) : ""}
+        <span style={{ paddingLeft: 10 }}>
+          <CurrencyDropdown
+            label="Select second currency"
+            value={opportunitySecondCurrencies}
+            onChange={setOpportunitySecondCurrencies}
+            options={currenciesList}
+            disabled={opportunityFirstCurrencies.length === 0}
+          />
+        </span>
+        <div style={{ padding: 10 }}>
+          {`Opportunity is ${resultType}: `}
+          {opportunityData ? Math.round(parseFloat(opportunityData)) : ""}
+        </div>
+
+        <Button onClick={checkFields}> Get opportunity data</Button>
+        <FormControlWithError error={error}></FormControlWithError>
       </div>
     </div>
   );
